@@ -30,8 +30,8 @@ build: clean-optional
 	meson compile -C build
 
 .ONESHELL:
-.PHONY: build-with-tests
-build-with-tests:
+.PHONY: build-dev
+build-dev:
 	set -ex
 	$(MAKE) build \
 		BUILD_TYPE="debug" \
