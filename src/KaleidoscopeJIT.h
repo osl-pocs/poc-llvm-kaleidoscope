@@ -1,9 +1,10 @@
 // https://github.com/llvm/llvm-project/blob/llvmorg-13.0.1/llvm/examples/Kaleidoscope/include/KaleidoscopeJIT.h
 
-//===- KaleidoscopeJIT.h - A simple JIT for Kaleidoscope --------*- C++ -*-===//
+//===- KaleidoscopeJIT.h - A simple JIT for Kaleidoscope --------*- C++
+//-*-===//
 //
-// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
-// See https://llvm.org/LICENSE.txt for license information.
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM
+// Exceptions. See https://llvm.org/LICENSE.txt for license information.
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //
 //===----------------------------------------------------------------------===//
@@ -15,25 +16,26 @@
 #ifndef LLVM_EXECUTIONENGINE_ORC_KALEIDOSCOPEJIT_H
 #define LLVM_EXECUTIONENGINE_ORC_KALEIDOSCOPEJIT_H
 
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ExecutionEngine/JITSymbol.h"
-#include "llvm/ExecutionEngine/Orc/CompileUtils.h"
-#include "llvm/ExecutionEngine/Orc/Core.h"
-#include "llvm/ExecutionEngine/Orc/ExecutionUtils.h"
-#include "llvm/ExecutionEngine/Orc/ExecutorProcessControl.h"
-#include "llvm/ExecutionEngine/Orc/IRCompileLayer.h"
-#include "llvm/ExecutionEngine/Orc/JITTargetMachineBuilder.h"
-#include "llvm/ExecutionEngine/Orc/RTDyldObjectLinkingLayer.h"
-#include "llvm/ExecutionEngine/SectionMemoryManager.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/LLVMContext.h"
 #include <memory>
+
+#include <llvm/ADT/StringRef.h>
+#include <llvm/ExecutionEngine/JITSymbol.h>
+#include <llvm/ExecutionEngine/Orc/CompileUtils.h>
+#include <llvm/ExecutionEngine/Orc/Core.h>
+#include <llvm/ExecutionEngine/Orc/ExecutionUtils.h>
+#include <llvm/ExecutionEngine/Orc/ExecutorProcessControl.h>
+#include <llvm/ExecutionEngine/Orc/IRCompileLayer.h>
+#include <llvm/ExecutionEngine/Orc/JITTargetMachineBuilder.h>
+#include <llvm/ExecutionEngine/Orc/RTDyldObjectLinkingLayer.h>
+#include <llvm/ExecutionEngine/SectionMemoryManager.h>
+#include <llvm/IR/DataLayout.h>
+#include <llvm/IR/LLVMContext.h>
 
 namespace llvm {
 namespace orc {
 
 class KaleidoscopeJIT {
-private:
+ private:
   std::unique_ptr<ExecutionSession> ES;
 
   DataLayout DL;
@@ -42,16 +44,23 @@ private:
   RTDyldObjectLinkingLayer ObjectLayer;
   IRCompileLayer CompileLayer;
 
-  JITDylib &MainJD;
+  JITDylib& MainJD;
 
-public:
-  KaleidoscopeJIT(std::unique_ptr<ExecutionSession> ES,
-                  JITTargetMachineBuilder JTMB, DataLayout DL)
-      : ES(std::move(ES)), DL(std::move(DL)), Mangle(*this->ES, this->DL),
-        ObjectLayer(*this->ES,
-                    []() { return std::make_unique<SectionMemoryManager>(); }),
-        CompileLayer(*this->ES, ObjectLayer,
-                     std::make_unique<ConcurrentIRCompiler>(std::move(JTMB))),
+ public:
+  KaleidoscopeJIT(
+      std::unique_ptr<ExecutionSession> ES,
+      JITTargetMachineBuilder JTMB,
+      DataLayout DL)
+      : ES(std::move(ES)),
+        DL(std::move(DL)),
+        Mangle(*this->ES, this->DL),
+        ObjectLayer(
+            *this->ES,
+            []() { return std::make_unique<SectionMemoryManager>(); }),
+        CompileLayer(
+            *this->ES,
+            ObjectLayer,
+            std::make_unique<ConcurrentIRCompiler>(std::move(JTMB))),
         MainJD(this->ES->createBareJITDylib("<main>")) {
     MainJD.addGenerator(
         cantFail(DynamicLibrarySearchGenerator::GetForCurrentProcess(
@@ -77,13 +86,17 @@ public:
     if (!DL)
       return DL.takeError();
 
-    return std::make_unique<KaleidoscopeJIT>(std::move(ES), std::move(JTMB),
-                                             std::move(*DL));
+    return std::make_unique<KaleidoscopeJIT>(
+        std::move(ES), std::move(JTMB), std::move(*DL));
   }
 
-  const DataLayout &getDataLayout() const { return DL; }
+  const DataLayout& getDataLayout() const {
+    return DL;
+  }
 
-  JITDylib &getMainJITDylib() { return MainJD; }
+  JITDylib& getMainJITDylib() {
+    return MainJD;
+  }
 
   Error addModule(ThreadSafeModule TSM, ResourceTrackerSP RT = nullptr) {
     if (!RT)
@@ -96,7 +109,7 @@ public:
   }
 };
 
-} // end namespace orc
-} // end namespace llvm
+}  // end namespace orc
+}  // end namespace llvm
 
-#endif // LLVM_EXECUTIONENGINE_ORC_KALEIDOSCOPEJIT_H
+#endif  // LLVM_EXECUTIONENGINE_ORC_KALEIDOSCOPEJIT_H

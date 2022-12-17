@@ -11,15 +11,15 @@ repos:
   - repo: local
     hooks:
 
-      - id: clang-tidy
-        name: clang-tidy
-        entry: ./scripts/run-clang-tidy.sh
-        language: system
-        exclude: ^$
-        pass_filenames: false
-        stages:
-          - commit
-        types_or: [c++, c]
+      # - id: clang-tidy
+      #   name: clang-tidy
+      #   entry: ./scripts/run-clang-tidy.sh
+      #   language: system
+      #   exclude: ^$
+      #   pass_filenames: false
+      #   stages:
+      #     - commit
+      #   types_or: [c++, c]
 
       - id: clang-format
         name: clang-format
