@@ -17,7 +17,6 @@ TEST_DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && cd ..
 
 KALEIDOSCOPE="${DEBUG} ./build/kaleidoscope"
 
-
 for test_name in "average" "fibonacci"; do
   print_header "${test_name}"
   ${KALEIDOSCOPE} < "${TEST_DIR_PATH}/${test_name}.src"

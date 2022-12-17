@@ -35,7 +35,7 @@ build-dev:
 	set -ex
 	$(MAKE) build \
 		BUILD_TYPE="debug" \
-		ARGS="-Ddev=enabled -Db_coverage=true -Db_sanitize=address"
+		ARGS="-Ddev=enabled -Db_coverage=true"
 
 .ONESHELL:
 .PHONY: install
